@@ -1,0 +1,28 @@
+import { Timestamp } from "mongodb";
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema({
+    name : {
+        type : String,
+        required : true
+    },
+    email : {
+        type : String,
+        required : true
+    },
+    phoneNumber : {
+        type : Number,
+        required : true
+    },
+    password : {
+        type : String,
+        required : true
+    },
+    timeStamp : {
+        type : Date,
+        default : Date.now
+    }
+});
+
+const User = mongoose.model('User',userSchema);
+export default User;
