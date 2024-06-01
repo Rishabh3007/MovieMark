@@ -1,7 +1,10 @@
 import express from 'express';
 import cors from "cors";
 import "./db/connection.js"
-import User from './models/userSchema.js';
+import authRouter from './routes/auth.js';
+import playlistRouter from './routes/playlist.js'
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -10,13 +13,16 @@ const port = process.env.PORT;
 
 app.use(cors());
 
-// Define a route for the root URL
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+// Middleware to parse JSON and URL-encoded data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-const user = new User({ name:"rishabh", email:"rjmail.com", phoneNumber:1234567890, password:"password" });
-    await user.save();
+// Use the router
+app.use(authRouter);
+app.use(playlistRouter);
+
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
