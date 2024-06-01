@@ -149,6 +149,10 @@ router.put("/add_movie/:id", authenticate, async (req, res) => {
         if(playlist.userId.toString() !== req.userId) {
             return res.status(400).json({ status: false, error: "Cannot add movie to playlist" });
         }
+        const movieExist = playlist.movieList.find(movie => movie.imdbID === imdbID);
+        if(movieExist) {
+            return res.status(400).json({ status: false, error: "Movie already exists in the playlist" });
+        }
         playlist.movieList.push({ imdbID, Title, Genre, Poster, imdbRating });
         await playlist.save();
         return res.status(200).json({ status: true, message: "Movie added to playlist successfully" });
