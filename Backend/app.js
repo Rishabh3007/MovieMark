@@ -23,6 +23,9 @@ app.use(cookieParser());
 
 // Use the router
 app.use(authRouter);
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 app.use(playlistRouter);
 
 
