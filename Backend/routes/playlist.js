@@ -31,11 +31,19 @@ router.get("/get_playlists", authenticate, async (req, res) => {
     try {
         console.log("Get Playlists")
         //req.userId is string 
-        const playlists = await Playlist.find({ userId: mongoose.Types.ObjectId.createFromHexString(req.userId) }).select('_id name isPublic createdAt updatedAt');
+        const playlists = await Playlist.find({ userId: mongoose.Types.ObjectId.createFromHexString(req.userId) }).select('_id name isPublic createdAt updatedAt movieList').lean();
         if(!playlists) {
             return res.status(400).json({ status: false, error: "No playlists found" });
         }
-        return res.status(200).json({ status: true, playlists: playlists });
+        const playlistsWithPosters = playlists.map(playlist => {
+            const firstMoviePoster = playlist.movieList.length > 0 ? playlist.movieList[0].Poster : "https://miro.medium.com/v2/resize:fit:696/1*JXB8i6O1Fq-rIaBOSJQi5g.png";
+            return {
+                ...playlist,
+                firstMoviePoster,
+            };
+        });
+        // console.log(playlistsWithPosters)
+        return res.status(200).json({ status: true, playlists: playlistsWithPosters });
     } catch (error) {
         console.log(error)
         return res.status(400).json({ status: false, error: error.message });
@@ -134,7 +142,8 @@ router.delete("/delete_playlist/:id", authenticate, async (req, res) => {
 
 router.put("/add_movie/:id", authenticate, async (req, res) => {
     try {
-        console.log("Add Movie")
+        console.log("Add Movie", req.body);
+        console.log(req.params.id)
         const { imdbID, Title, Genre, Poster, imdbRating } = req.body;
         if (!imdbID || !Title || !Genre || !Poster || !imdbRating) {
             return res.status(400).json({ status: false, error: "please fill all the fields" });
@@ -150,7 +159,9 @@ router.put("/add_movie/:id", authenticate, async (req, res) => {
             return res.status(400).json({ status: false, error: "Cannot add movie to playlist" });
         }
         const movieExist = playlist.movieList.find(movie => movie.imdbID === imdbID);
-        if(movieExist) {
+        console.log(movieExist)
+        if(movieExist != undefined || movieExist != null) {
+            console.log("reahed here", movieExist)
             return res.status(400).json({ status: false, error: "Movie already exists in the playlist" });
         }
         playlist.movieList.push({ imdbID, Title, Genre, Poster, imdbRating });

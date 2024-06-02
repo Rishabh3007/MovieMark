@@ -6,6 +6,8 @@ import { UserProvider } from './contexts/UserContext';
 import Login from './pages/Login';
 import Layout from './layouts/Layout';
 import PrivateRoute from './components/PrivateRoute';
+import Playlist from './pages/Playlist';
+import Movie from './pages/Movie';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path='/' element={<Layout/>}>
               <Route index element={<PrivateRoute element={<Home />} />} />
+              <Route path='playlist/:id' element={<PrivateRoute element={<Playlist />} />} />
+              <Route path='movie/:imdbID' element={<PrivateRoute element={<Movie />} />} />
             </Route>
           </Routes>
         </BrowserRouter>
