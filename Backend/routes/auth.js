@@ -3,6 +3,7 @@ const router = express.Router();
 import User from "../models/userSchema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import authenticate from "../middlewares/authenticate.js";
 
 router.post("/login", async (req, res) => {
     try {
@@ -54,6 +55,11 @@ router.post("/register", async (req, res) => {
         console.log(error)
         return res.status(400).send(error);
     }
+});
+
+router.get('/validateToken', authenticate, (req, res) => {
+    console.log("validateToken")
+    return res.status(200).json({ status : true, message: "Token Validated Successfully" });
 });
 
 export default router;

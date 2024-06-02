@@ -11,7 +11,10 @@ const app = express();
 // Define a port to listen on
 const port = process.env.PORT;
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // Your frontend origin
+  credentials: true
+}));
 
 // Middleware to parse JSON and URL-encoded data
 app.use(bodyParser.json());

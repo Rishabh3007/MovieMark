@@ -32,7 +32,8 @@ const authenticate = (req, res, next) => {
         req.userId = verifiedToken._id;
         next();
     } catch (error) {
-        
+        console.log(error);
+        return res.status(401).json({status : false, error: "Unauthorized"});
     }
 }
 
