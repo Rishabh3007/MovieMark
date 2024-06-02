@@ -19,7 +19,7 @@ const SearchBar: React.FC = () => {
         setError('');
 
         try {
-            const response = await axios.get(`http://www.omdbapi.com/?s=${query}&page=1&apikey=${process.env.REACT_APP_API_KEY}`);
+            const response = await axios.get(`https://www.omdbapi.com/?s=${query}&page=1&apikey=${process.env.REACT_APP_API_KEY}`);
             if (response.data.Search) {
                 setMovies(response.data.Search);
             } else {

@@ -42,7 +42,7 @@ function Movie() {
         (async () => {
             try {
                 const response = await axios.get(
-                    `http://www.omdbapi.com/?i=${imdbID}&apikey=${process.env.REACT_APP_API_KEY}`
+                    `https://www.omdbapi.com/?i=${imdbID}&apikey=${process.env.REACT_APP_API_KEY}`
                 );
                 if (response.data) {
                     // console.log(response.data)
