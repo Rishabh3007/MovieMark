@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -8,6 +9,11 @@ const SearchBar: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [isFocused, setIsFocused] = useState(false);
+
+    const inputRef = useRef<HTMLInputElement>(null);
+    const suggestionRef = useRef<HTMLDivElement>(null);
+
+    const navigate = useNavigate();
 
     const fetchMovies = useCallback(debounce(async (query: string) => {
         if (query.trim() === '') {
@@ -46,14 +52,33 @@ const SearchBar: React.FC = () => {
         setIsFocused(true);
     };
 
-    const handleBlur = () => {
-        setTimeout(() => setIsFocused(false), 100); // Delay to allow click events on suggestions
+    const handleClickOutside = (event: MouseEvent) => {
+        if (
+            inputRef.current && 
+            suggestionRef.current &&
+            !inputRef.current.contains(event.target as Node) && 
+            !suggestionRef.current.contains(event.target as Node)
+        ) {
+            setIsFocused(false);
+        }
     };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // const handleBlur = () => {
+    //     setTimeout(() => setIsFocused(false), 100); // Delay to allow click events on suggestions
+    // };
 
     const handleMovieClick = (imdbID: string) => {
         console.log(imdbID);
+        navigate(`/movie/${imdbID}`);
         setSearchTerm('');
-        setIsFocused(false);
+        // setIsFocused(false);
     };
 
     return (
@@ -66,10 +91,10 @@ const SearchBar: React.FC = () => {
                     onChange={handleSearchChange}
                     className="border border-gray-300 rounded px-4 py-2 w-full text-black"
                     onFocus={handleFocus}
-                    onBlur={handleBlur}
+                    ref={inputRef}
                 />
                 {isFocused && movies?.length > 0 && (
-                    <div className="absolute left-0 right-0 mt-2 bg-gray-800 rounded shadow-lg z-50">
+                    <div className="absolute left-0 right-0 mt-2 bg-gray-800 rounded shadow-lg z-50" ref={suggestionRef}>
                         <ul className="space-y-1 p-1">
                             {movies.slice(0, 7).map((movie: any) => (
                                 <li key={movie.imdbID} className="flex items-center p-1 hover:bg-gray-700 rounded"
