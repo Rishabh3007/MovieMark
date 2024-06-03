@@ -67,6 +67,34 @@ router.get("/get_playlist/:id", authenticate, async (req, res) => {
     }
 })
 
+router.put('/update_playlist/:id', authenticate, async (req, res) => {
+    try {
+        console.log("Update Playlist")
+        console.log(req.body)
+        const { name, isPublic } = req.body;
+        if (!name || !isPublic) {
+            return res.status(400).json({ status: false, error: "Please fill all the fields" });
+        }
+        if(!req.params.id){
+            return res.status(400).json({ status: false, error: "Please provide playlist id" });
+        }
+        const playlist = await Playlist.findOne({ _id: mongoose.Types.ObjectId.createFromHexString(req.params.id) });
+        if(!playlist) {
+            return res.status(400).json({ status: false, error: "No playlist found" });
+        }
+        if(playlist.userId.toString() !== req.userId) {
+            return res.status(400).json({ status: false, error: "Cannot update playlist" });
+        }
+        playlist.name = name;
+        playlist.isPublic = isPublic === "true";
+        await playlist.save();
+        return res.status(200).json({ status: true, message: "Playlist updated successfully" });
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({ status: false, error: error.message });
+    }
+})
+
 router.put("/update_playlist_name/:id", authenticate, async (req, res) => {
     try {
         console.log("Update Playlist")
