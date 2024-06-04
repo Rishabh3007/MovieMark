@@ -22,6 +22,18 @@ export interface Playlist {
   createdAt: string;
   updatedAt: string;
   firstMoviePoster?: string;
+  userName : string
+}
+
+export const calculateUpdateDays = (updatedAt: string | undefined) => {
+  const today = moment()
+  const updated = moment(updatedAt)
+  const days = today.diff(updated, 'days')
+  if(days === 0) {
+    return 'Today'
+  }else{
+    return `${days} days ago`
+  }
 }
 
 function Home() {
@@ -53,16 +65,7 @@ function Home() {
     }
   
 
-  const calculateUpdateDays = (updatedAt: string) => {
-    const today = moment()
-    const updated = moment(updatedAt)
-    const days = today.diff(updated, 'days')
-    if(days === 0) {
-      return 'Today'
-    }else{
-      return `${days} days ago`
-    }
-  }
+  
 
   return (
     <>
@@ -70,9 +73,9 @@ function Home() {
       <h1
         className='text-3xl font-bold text-center mt-10 mb-10 text-primary'
         >Playlists</h1>
-      <div className='flex flex-row flex-wrap'>
+      <div className='flex flex-row flex-wrap justify-start'>
         {playlists?.length > 0 && playlists.map((playlist) => (
-          <Link key={playlist._id} className='flex flex-col items-center justify-center bg-gray-800 p-5 m-5 rounded-lg w-2/12 cursor-pointer' to={`/playlist/${playlist._id}`}>
+          <Link key={playlist._id} className='flex flex-col items-center justify-center bg-gray-800 p-5 m-5 rounded-lg w-[90%] md:w-3/12 lg:w-2/12 cursor-pointer' to={`/playlist/${playlist._id}`}>
             <img src={playlist.firstMoviePoster} alt="" className=' w-full' />
             <h2>{playlist.name}</h2>
             <p>{playlist.isPublic ? 'Public' : 'Private'}</p>
@@ -80,7 +83,7 @@ function Home() {
 
           </Link>
         ))}
-        <div className='flex flex-col items-center justify-center bg-gray-800 p-5 m-5 rounded-lg w-2/12 cursor-pointer'>
+        <div className='flex flex-col items-center justify-center bg-gray-800 p-5 m-5 rounded-lg w-[90%] md:w-3/12 lg:w-2/12 cursor-pointer min-h-96'>
           <button className='flex items-center justify-center w-full h-full text-4xl text-primary'
             onClick={openModal}
           >
@@ -97,12 +100,12 @@ function Home() {
                         closeModal={closeModal}
                         refreshPlaylists={fetchPlaylists}
                     />
-                    <button
+                    {/* <button
                         onClick={closeModal}
                         className="px-4 py-2 bg-primary text-white rounded-md"
                     >
                         Close Modal
-                    </button>
+                    </button> */}
                 </div>
             </Modal>
         </>

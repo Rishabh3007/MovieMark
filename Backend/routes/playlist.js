@@ -53,14 +53,20 @@ router.get("/get_playlists", authenticate, async (req, res) => {
 router.get("/get_playlist/:id", authenticate, async (req, res) => {
     try {
         console.log("Get Playlist")
-        const playlist = await Playlist.findOne({ _id: mongoose.Types.ObjectId.createFromHexString(req.params.id) });
+        const playlist = await Playlist.findOne({ _id: mongoose.Types.ObjectId.createFromHexString(req.params.id) }).populate("userId", "name").lean();
         if(!playlist) {
             return res.status(400).json({ status: false, error: "No playlist found" });
         }
-        if(playlist.userId.toString() !== req.userId && !playlist.isPublic) {
+        const playlistToSend = {
+            ...playlist,
+            userId: playlist.userId._id,
+            userName: playlist.userId.name,
+        }
+        // console.log(playlistToSend)
+        if(playlistToSend.userId.toString() !== req.userId && !playlist.isPublic) {
             return res.status(400).json({ status: false, error: "Cannot view playlist" });
         }
-        return res.status(200).json({ status: true, playlist: playlist });
+        return res.status(200).json({ status: true, playlist: playlistToSend });
     } catch (error) {
         console.log(error)
         return res.status(400).json({ status: false, error: error.message });

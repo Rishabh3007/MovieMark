@@ -69,7 +69,7 @@ const AddToPlaylist: React.FC<AddToPlaylistProps> = ({ imdbID, closeModal, Title
 
     return (
         <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">Select Playlist</h2>
+            <h2 className="text-xl font-bold mb-4 text-white">Select Playlist</h2>
             {loading ? (
                 <p>Loading...</p>
             ) : (
@@ -78,7 +78,7 @@ const AddToPlaylist: React.FC<AddToPlaylistProps> = ({ imdbID, closeModal, Title
                     <ul className='flex flex-col'>
                         {playlists.length > 0 ? (
                             playlists.map((playlist) => (
-                                <li key={playlist._id} className="mb-2">
+                                <li key={playlist._id} className="mb-2 text-white">
                                     <label className="flex items-center">
                                         <input
                                             type="radio"

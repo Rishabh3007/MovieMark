@@ -5,12 +5,14 @@ interface UserContextType {
     isLoggedIn: boolean;
     setIsLoggedIn: (status: boolean) => void;
     loading: boolean;
+    userId: string;
+    setUserId: (id: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string>("");
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
@@ -21,6 +23,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 console.log("Response from validateToken:", response.data);
                 if (response.data.status) {
                     setIsLoggedIn(true);
+                    setUserId(response.data.userId);
                 }
                 else{
                     setIsLoggedIn(false);
@@ -35,7 +38,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, []);
 
     return (
-        <UserContext.Provider value={{ isLoggedIn, loading, setIsLoggedIn }}>
+        <UserContext.Provider value={{ isLoggedIn, loading, setIsLoggedIn, userId, setUserId }}>
             {children}
         </UserContext.Provider>
     );

@@ -28,7 +28,7 @@ function Navbar() {
     return (
         <header className=" bg-transparent flex flex-wrap items-center py-4">
             <div className="flex-1 flex justify-between items-center">
-                <Link to="/" className="text-3xl text-primary">MovieMark</Link>
+                <Link to="/" className="text-3xl font-bold text-center text-primary">MovieMark</Link>
             </div>
 
             <div className="md:hidden">

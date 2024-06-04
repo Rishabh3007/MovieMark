@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface AddPlaylistProps {
   closeModal: () => void;
-  refreshPlaylists: () => void;
+  refreshPlaylists?: () => void;
   isUpdateMode?: boolean;
   playlistId?: string;
   playlistName?: string;
@@ -50,7 +50,9 @@ const AddPlaylist: React.FC<AddPlaylistProps> = ({
       if (response.data.status) {
         history('/'); // Redirect to home or playlists page after successful creation
         closeModal();
-        refreshPlaylists();
+        if (refreshPlaylists){
+          refreshPlaylists();
+        }
       } else {
         setError(response.data.error);
       }
@@ -77,7 +79,9 @@ const AddPlaylist: React.FC<AddPlaylistProps> = ({
       if (response.data.status) {
         // history('/'); // Redirect to home or playlists page after successful creation
         closeModal();
-        refreshPlaylists();
+        if (refreshPlaylists){
+          refreshPlaylists();
+        }
       } else {
         setError(response.data.error);
       }
