@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(cors({
-  origin: "http://localhost:3000", // Your frontend origin https://movie-mark-frontend.vercel.app
+  origin: "https://movie-mark-frontend.vercel.app", // Your frontend origin https://movie-mark-frontend.vercel.app
   credentials: true
 }));
 
