@@ -78,14 +78,14 @@ function Playlist() {
     }
   }
 
-  console.log(userId, playlist?.userId)
+  // console.log(userId, playlist?.userId)
 
   return (
     <div className='text-white'>
       <div className='flex justify-between items-center mb-4'>
         <h1 className='text-3xl font-bold text-primary'>{playlist?.name}</h1>
         {
-          userId === playlist?.userId && (
+          userId == playlist?.userId && (
             <div className='flex space-x-2'>
             <button
             className='bg-primary text-white px-3 py-2 rounded hover:bg-teal-600 transition duration-150 ease-in-out'
