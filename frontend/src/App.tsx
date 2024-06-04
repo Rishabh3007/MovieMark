@@ -8,6 +8,7 @@ import Layout from './layouts/Layout';
 import PrivateRoute from './components/PrivateRoute';
 import Playlist from './pages/Playlist';
 import Movie from './pages/Movie';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path='/' element={<Layout/>}>
               <Route index element={<PrivateRoute element={<Home />} />} />
               <Route path='playlist/:id' element={<PrivateRoute element={<Playlist />} />} />

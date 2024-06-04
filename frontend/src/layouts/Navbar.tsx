@@ -1,12 +1,29 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleToggle = () => {
         setIsOpen(!isOpen);
     };
+
+    const handleLogout = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/logout`, { withCredentials: true });
+            console.log(response);
+            if (response.data.status) {
+                window.location.href = '/login';
+            }
+        } catch (err) {
+            console.log(err);
+        }finally{
+            setLoading(false);
+        }
+    }
 
     return (
         <header className=" bg-transparent flex flex-wrap items-center py-4">
@@ -27,7 +44,8 @@ function Navbar() {
             <div className={`w-full md:flex md:items-center md:w-auto ${isOpen ? 'block' : 'hidden'}`}>
                 <nav className="md:flex items-center justify-between text-base text-primary pt-4 md:pt-0 w-full">
                     <ul className="md:flex items-center justify-between text-base text-primary pt-4 md:pt-0">
-                        <li><a className="md:p-4 py-3 px-0 block" href="#">Logout</a></li>
+                        <li><button className="bg-primary text-white px-4 py-2 rounded hover:bg-teal-600 transition duration-150 ease-in-out" disabled={loading}
+                        onClick={handleLogout}>{loading ? "logging out....": ("Logout")}</button></li>
                     </ul>
                 </nav>
             </div>

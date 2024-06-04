@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
+import { Link } from 'react-router-dom';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -53,6 +54,7 @@ const Login: React.FC = () => {
                         />
                     </div>
                     <button type="submit" className="w-full py-2 bg-teal-500 text-white rounded">Login</button>
+                    <p className='text-white'>Don't have an account <Link className=' text-cyan-600 underline' to={"/register"}>Register Now!</Link></p>
                 </form>
             </div>
         </div>

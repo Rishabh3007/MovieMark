@@ -27,8 +27,8 @@ router.post("/login", async (req, res) => {
         res.cookie("jwtoken", token, {
             expires: new Date(Date.now() + 86400000), // 1 day
             httpOnly: true, // Accessible only by the web server
-            // secure: process.env.NODE_ENV === 'production', // Ensures the cookie is only used over HTTPS
-            // sameSite: 'None', // Required for cross-origin requests
+            secure: process.env.NODE_ENV === 'production', // Ensures the cookie is only used over HTTPS
+            sameSite: 'None', // Required for cross-origin requests
         });
         return res.status(200).json({ status : true,  message: "User Login Successfully" });
     } catch (error) {
@@ -57,6 +57,12 @@ router.post("/register", async (req, res) => {
         console.log(error)
         return res.status(400).send(error);
     }
+});
+
+router.get("/logout", (req, res) => {
+    console.log("logout")
+    res.clearCookie("jwtoken", { path: "/" });
+    return res.status(200).json({ status : true, message: "User Logout Successfully" });
 });
 
 router.get('/validateToken', authenticate, (req, res) => {
